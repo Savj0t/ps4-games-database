@@ -3,245 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1920, initial-scale=1.0">
-    <meta name="description" content="PS4 Games Database - 17,065+ PS4 games with 45,910+ download links">
-    <title>PS4 Games Database - PWA</title>
+    <title>PS4 Games Database</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #1a1a2e; color: #fff; min-height: 100vh; padding: 20px; }
         .container { max-width: 1880px; margin: 0 auto; background: #16213e; border-radius: 10px; overflow: hidden; }
-        header { background: #0f3460; padding: 40px; text-align: center; border-bottom: 3px solid #e94560; }
-        h1 { font-size: 2.5em; margin-bottom: 20px; }
-        .stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-        .stat-item { text-align: center; }
-        .stat-number { font-size: 1.8em; font-weight: bold; display: block; }
-        .stat-label { font-size: 0.9em; opacity: 0.8; margin-top: 5px; }
-        .search-container { padding: 30px; background: #0f3460; border-bottom: 2px solid #e94560; }
-        #searchInput { width: 100%; padding: 20px; font-size: 18px; border: 2px solid #e94560; border-radius: 5px; outline: none; background: #1a1a2e; color: #fff; }
-        #searchInput:focus { border-color: #00d4ff; box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
-        .search-info { margin-top: 15px; text-align: center; color: #aaa; font-size: 16px; }
-        .games-container { padding: 30px; max-height: 700px; overflow-y: auto; }
-        .letter-section { margin-bottom: 30px; }
-        .letter-header { font-size: 2em; font-weight: bold; color: #00d4ff; padding: 15px 0; border-bottom: 2px solid #e94560; margin-bottom: 20px; }
-        .game-item { padding: 20px; margin: 10px 0; border-radius: 5px; background: #0f3460; border-left: 4px solid #e94560; }
-        .game-item:hover { background: #1a4d7a; border-left-color: #00d4ff; }
-        .game-title { font-size: 18px; font-weight: 600; color: #00d4ff; margin-bottom: 10px; }
-        .download-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .download-btn { padding: 12px 20px; border-radius: 5px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; border: none; cursor: pointer; transition: all 0.2s; }
-        .btn-mediafire { background: #1e88e5; color: white; }
-        .btn-mediafire:hover { background: #1565c0; }
-        .btn-1file { background: #43a047; color: white; }
-        .btn-1file:hover { background: #2e7d32; }
-        .btn-other { background: #fb8c00; color: white; }
-        .btn-other:hover { background: #e65100; }
-        .btn-page { background: #6c757d; color: white; }
-        .btn-page:hover { background: #495057; }
-        .link-count { font-size: 12px; color: #aaa; margin-top: 5px; }
-        footer { background: #0f3460; padding: 25px; text-align: center; color: #aaa; border-top: 2px solid #e94560; }
-        footer a { color: #00d4ff; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-        .scroll-top { position: fixed; bottom: 30px; right: 30px; background: #e94560; color: white; width: 60px; height: 60px; border-radius: 5px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; border: none; transition: all 0.3s; }
-        .scroll-top:hover { background: #00d4ff; }
-        .scroll-top.show { display: flex; }
-        .loading { text-align: center; padding: 50px; font-size: 18px; color: #aaa; }
-        .progress-bar { width: 100%; height: 4px; background: #0f3460; margin: 10px 0; border-radius: 2px; overflow: hidden; }
+        header { background: #0f3460; padding: 30px 40px; text-align: center; border-bottom: 3px solid #e94560; }
+        h1 { font-size: 2.2em; margin-bottom: 10px; }
+        .stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 10px; }
+        .stat-number { font-size: 1.5em; font-weight: bold; display: block; }
+        .stat-label { font-size: 0.85em; opacity: 0.8; }
+        .search-container { padding: 25px 30px; background: #0f3460; border-bottom: 2px solid #e94560; }
+        #searchInput { width: 100%; padding: 18px 22px; font-size: 20px; border: 2px solid #e94560; border-radius: 5px; outline: none; background: #1a1a2e; color: #fff; }
+        #searchInput:focus { border-color: #00d4ff; }
+        .search-info { margin-top: 12px; text-align: center; color: #aaa; font-size: 15px; }
+        .progress-bar { width: 100%; height: 4px; background: #0f3460; margin: 10px 0 0; border-radius: 2px; overflow: hidden; }
         .progress-fill { height: 100%; background: #00d4ff; width: 0%; transition: width 0.3s; }
+        .letter-nav { display: flex; flex-wrap: wrap; gap: 8px; padding: 20px 30px; background: #16213e; border-bottom: 2px solid #0f3460; }
+        .letter-btn { padding: 10px 16px; background: #0f3460; color: #00d4ff; border: 1px solid #00d4ff; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; min-width: 44px; text-align: center; }
+        .letter-btn:hover, .letter-btn.active { background: #00d4ff; color: #0f3460; }
+        .games-container { padding: 20px 30px; min-height: 300px; }
+        .placeholder { text-align: center; padding: 60px 20px; color: #aaa; font-size: 20px; line-height: 1.8; }
+        .game-item { padding: 18px 20px; margin: 8px 0; border-radius: 5px; background: #0f3460; border-left: 4px solid #e94560; }
+        .game-item:hover { background: #1a4d7a; border-left-color: #00d4ff; }
+        .game-title { font-size: 20px; font-weight: 600; color: #00d4ff; margin-bottom: 10px; }
+        .download-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .download-btn { padding: 10px 18px; border-radius: 5px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; color: white; }
+        .btn-mediafire { background: #1e88e5; }
+        .btn-mediafire:hover { background: #1565c0; }
+        .btn-1file { background: #43a047; }
+        .btn-1file:hover { background: #2e7d32; }
+        .btn-other { background: #fb8c00; }
+        .btn-other:hover { background: #e65100; }
+        .link-count { font-size: 12px; color: #aaa; margin-top: 6px; }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 25px; border-top: 2px solid #0f3460; flex-wrap: wrap; }
+        .page-btn { padding: 12px 28px; background: #0f3460; color: #00d4ff; border: 2px solid #00d4ff; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .page-btn:hover { background: #00d4ff; color: #0f3460; }
+        .page-btn:disabled { opacity: 0.3; cursor: default; }
+        .page-info { color: #aaa; font-size: 15px; }
+        footer { background: #0f3460; padding: 20px; text-align: center; color: #aaa; border-top: 2px solid #e94560; font-size: 14px; }
+        .scroll-top { position: fixed; bottom: 30px; right: 30px; background: #e94560; color: white; width: 56px; height: 56px; border-radius: 5px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; border: none; }
+        .scroll-top:hover { background: #00d4ff; color: #0f3460; }
+        .scroll-top.show { display: flex; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>PS4 Games Database</h1>
-            <div class="stats">
-                <div class="stat-item"><span class="stat-number">17,065</span><span class="stat-label">Games</span></div>
-                <div class="stat-item"><span class="stat-number">45,910</span><span class="stat-label">Links</span></div>
+<div class="container">
+
+    <header>
+        <h1>PS4 Games Database</h1>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number" id="statGames">Loading...</span>
+                <span class="stat-label">Games</span>
             </div>
-        </header>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games..." onkeyup="searchGames()">
-            <div class="search-info" id="searchInfo">Loading...</div>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="stat-item">
+                <span class="stat-number" id="statLinks">-</span>
+                <span class="stat-label">Download Links</span>
+            </div>
         </div>
-        <div class="games-container" id="gamesContainer">
-            <div class="loading">Loading games database...</div>
-        </div>
-        <footer>
-            <p>PS4 Games Database | 17,065+ Games | 45,910+ Download Links</p>
-            <p>Sources: dlpsgame.com, romsfun.com, arabicps4games.github.io</p>
-        </footer>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput"
+               placeholder="Type to search games (e.g. God of War, FIFA, GTA)..."
+               oninput="onSearch()">
+        <div class="search-info" id="searchInfo">Loading database - please wait...</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     </div>
-    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">UP</button>
-    <script>
-        var allGames = [];
 
-        function loadGames() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'ps4_games_expanded.json', true);
+    <div class="letter-nav" id="letterNav"></div>
 
-            xhr.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    document.getElementById('progressFill').style.width = ((e.loaded / e.total) * 100) + '%';
-                }
-            };
+    <div class="games-container" id="gamesContainer">
+        <div class="placeholder">Loading database...</div>
+    </div>
 
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        allGames = Array.isArray(data) ? data : (data.games || Object.values(data));
-                        displayGames(allGames);
-                        document.getElementById('searchInfo').textContent = 'Showing all ' + allGames.length + ' games';
-                    } catch (e) {
-                        showError('Error parsing database: ' + e.message);
-                    }
-                } else {
-                    // Try fallback file
-                    var xhr2 = new XMLHttpRequest();
-                    xhr2.open('GET', 'ps4_games_with_downloads.json', true);
-                    xhr2.onload = function() {
-                        if (xhr2.status === 200) {
-                            try {
-                                var data = JSON.parse(xhr2.responseText);
-                                allGames = Array.isArray(data) ? data : (data.games || Object.values(data));
-                                displayGames(allGames);
-                                document.getElementById('searchInfo').textContent = 'Showing all ' + allGames.length + ' games';
-                            } catch (e) {
-                                showError('Error parsing database: ' + e.message);
-                            }
-                        } else {
-                            showError('HTTP ' + xhr2.status + ': Could not load database');
-                        }
-                    };
-                    xhr2.onerror = function() { showError('Network error loading database'); };
-                    xhr2.send();
-                }
-            };
+    <div class="pagination" id="pagination" style="display:none">
+        <button class="page-btn" id="prevBtn" onclick="changePage(-1)">Prev</button>
+        <span class="page-info" id="pageInfo"></span>
+        <button class="page-btn" id="nextBtn" onclick="changePage(1)">Next</button>
+    </div>
 
-            xhr.onerror = function() { showError('Network error loading database'); };
-            xhr.send();
-        }
+    <footer>
+        PS4 Games Database | Sources: dlpsgame.com, romsfun.com, arabicps4games.github.io
+    </footer>
+</div>
 
-        function showError(msg) {
-            document.getElementById('gamesContainer').innerHTML =
-                '<div class="loading">❌ ' + msg + '<br><br>' +
-                '<button onclick="loadGames()" style="padding:10px 20px;font-size:16px;cursor:pointer;background:#e94560;color:white;border:none;border-radius:5px;">Retry</button></div>';
-        }
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo(0,0)">UP</button>
 
-        function displayGames(games) {
-            var container = document.getElementById('gamesContainer');
-            container.innerHTML = '';
+<script>
+var allGames      = [];
+var filteredGames = [];
+var currentPage   = 0;
+var PAGE_SIZE     = 40;
+var searchTimer   = null;
 
-            var grouped = {};
-            for (var i = 0; i < games.length; i++) {
-                var game = games[i];
-                if (!game || !game.name) continue;
-                var firstChar = game.name.charAt(0).toUpperCase();
-                var letter = /[A-Z]/.test(firstChar) ? firstChar : '#';
-                if (!grouped[letter]) grouped[letter] = [];
-                grouped[letter].push(game);
-            }
-
-            var letters = Object.keys(grouped).sort(function(a, b) {
-                if (a === '#') return -1;
-                if (b === '#') return 1;
-                return a.localeCompare(b);
-            });
-
-            for (var l = 0; l < letters.length; l++) {
-                var letter = letters[l];
-                var section = document.createElement('div');
-                section.className = 'letter-section';
-
-                var header = document.createElement('div');
-                header.className = 'letter-header';
-                header.textContent = letter;
-                section.appendChild(header);
-
-                var letterGames = grouped[letter];
-                for (var g = 0; g < letterGames.length; g++) {
-                    var game = letterGames[g];
-                    var gameDiv = document.createElement('div');
-                    gameDiv.className = 'game-item';
-
-                    var title = document.createElement('div');
-                    title.className = 'game-title';
-                    title.textContent = game.name;
-                    gameDiv.appendChild(title);
-
-                    var linksDiv = document.createElement('div');
-                    linksDiv.className = 'download-links';
-
-                    // FIXED: safely handle missing download_links fields
-                    var dl = game.download_links || {};
-                    var mediafire = dl.mediafire || [];
-                    var onefile = dl['1file'] || [];
-                    var other = dl.other || [];
-                    var links = mediafire.concat(onefile).concat(other);
-
-                    for (var k = 0; k < links.length; k++) {
-                        var link = links[k];
-                        var btn = document.createElement('a');
-                        btn.href = 'redirect-optimized.html?url=' + encodeURIComponent(link) + '&game=' + encodeURIComponent(game.name);
-                        btn.className = 'download-btn btn-mediafire';
-                        btn.textContent = 'Link ' + (k + 1);
-                        btn.target = '_blank';
-                        linksDiv.appendChild(btn);
-                    }
-
-                    gameDiv.appendChild(linksDiv);
-
-                    var linkCount = document.createElement('div');
-                    linkCount.className = 'link-count';
-                    linkCount.textContent = (game.total_links || links.length) + ' links available';
-                    gameDiv.appendChild(linkCount);
-
-                    section.appendChild(gameDiv);
-                }
-
-                container.appendChild(section);
-            }
-        }
-
-        function searchGames() {
-            var input = document.getElementById('searchInput');
-            var filter = input.value.toUpperCase();
-            var sections = document.querySelectorAll('.letter-section');
-            var visibleCount = 0;
-
-            for (var s = 0; s < sections.length; s++) {
-                var section = sections[s];
-                var games = section.querySelectorAll('.game-item');
-                var sectionHasVisible = false;
-
-                for (var g = 0; g < games.length; g++) {
-                    var game = games[g];
-                    var text = game.textContent || game.innerText;
-                    if (text.toUpperCase().indexOf(filter) > -1) {
-                        game.style.display = '';
-                        sectionHasVisible = true;
-                        visibleCount++;
-                    } else {
-                        game.style.display = 'none';
-                    }
-                }
-
-                section.style.display = sectionHasVisible ? '' : 'none';
-            }
-
-            document.getElementById('searchInfo').textContent = filter
-                ? 'Found ' + visibleCount + ' games matching "' + input.value + '"'
-                : 'Showing all ' + allGames.length + ' games';
-        }
-
-        var scrollBtn = document.getElementById('scrollTop');
-        var gamesContainer = document.getElementById('gamesContainer');
-
-        gamesContainer.addEventListener('scroll', function() {
-            scrollBtn.classList[gamesContainer.scrollTop > 300 ? 'add' : 'remove']('show');
+// Load DB - try primary file then fallback
+function loadGames() {
+    fetchJson('ps4_games_expanded.json', function(ok, text) {
+        if (ok) { parseAndInit(text); return; }
+        fetchJson('ps4_games_with_downloads.json', function(ok2, text2) {
+            if (ok2) { parseAndInit(text2); }
+            else { showError('Could not load database. Check connection and retry.'); }
         });
+    });
+}
 
-        function scrollToTop() { gamesContainer.scrollTop = 0; }
+function fetchJson(url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onprogress = function(e) {
+        if (e.lengthComputable) {
+            document.getElementById('progressFill').style.width =
+                Math.round((e.loaded / e.total) * 100) + '%';
+        }
+    };
+    xhr.onload  = function() { cb(xhr.status === 200, xhr.responseText); };
+    xhr.onerror = function() { cb(false, ''); };
+    xhr.send();
+}
 
-        loadGames();
-    </script>
+function parseAndInit(text) {
+    try {
+        var data = JSON.parse(text);
+        allGames = Array.isArray(data) ? data : (data.games || Object.values(data));
+
+        var totalLinks = 0;
+        for (var i = 0; i < allGames.length; i++) {
+            totalLinks += (allGames[i].total_links || 0);
+        }
+
+        document.getElementById('statGames').textContent = allGames.length.toLocaleString();
+        document.getElementById('statLinks').textContent = totalLinks > 0 ? totalLinks.toLocaleString() : '-';
+        document.getElementById('progressFill').style.width = '100%';
+
+        buildLetterNav();
+        showPlaceholder();
+    } catch(e) {
+        showError('Error reading database: ' + e.message);
+    }
+}
+
+// Build A-Z letter buttons
+function buildLetterNav() {
+    var letters = {};
+    for (var i = 0; i < allGames.length; i++) {
+        var g = allGames[i];
+        if (!g || !g.name) continue;
+        var ch = g.name.charAt(0).toUpperCase();
+        letters[/[A-Z]/.test(ch) ? ch : '#'] = true;
+    }
+
+    var sorted = Object.keys(letters).sort(function(a, b) {
+        if (a === '#') return -1;
+        if (b === '#') return 1;
+        return a.localeCompare(b);
+    });
+
+    var nav = document.getElementById('letterNav');
+    nav.innerHTML = '';
+
+    var allBtn = document.createElement('button');
+    allBtn.className = 'letter-btn';
+    allBtn.textContent = 'All';
+    allBtn.onclick = clearLetter;
+    nav.appendChild(allBtn);
+
+    for (var j = 0; j < sorted.length; j++) {
+        (function(letter) {
+            var btn = document.createElement('button');
+            btn.className = 'letter-btn';
+            btn.id = 'lbtn-' + letter;
+            btn.textContent = letter;
+            btn.onclick = function() { selectLetter(letter); };
+            nav.appendChild(btn);
+        })(sorted[j]);
+    }
+}
+
+function selectLetter(letter) {
+    document.getElementById('searchInput').value = '';
+    setActiveLetterBtn('lbtn-' + letter);
+
+    filteredGames = allGames.filter(function(g) {
+        if (!g || !g.name) return false;
+        var ch = g.name.charAt(0).toUpperCase();
+        return (/[A-Z]/.test(ch) ? ch : '#') === letter;
+    });
+
+    currentPage = 0;
+    renderPage();
+}
+
+function clearLetter() {
+    document.getElementById('searchInput').value = '';
+    setActiveLetterBtn(null);
+    showPlaceholder();
+}
+
+function setActiveLetterBtn(id) {
+    var btns = document.querySelectorAll('.letter-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+    if (id) {
+        var b = document.getElementById(id);
+        if (b) b.classList.add('active');
+    }
+}
+
+// Search with debounce
+function onSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(doSearch, 350);
+}
+
+function doSearch() {
+    var query = document.getElementById('searchInput').value.trim().toUpperCase();
+    setActiveLetterBtn(null);
+
+    if (query.length < 2) { showPlaceholder(); return; }
+
+    filteredGames = allGames.filter(function(g) {
+        return g && g.name && g.name.toUpperCase().indexOf(query) > -1;
+    });
+
+    currentPage = 0;
+    renderPage();
+}
+
+// Render current page of filteredGames
+function renderPage() {
+    var start     = currentPage * PAGE_SIZE;
+    var end       = Math.min(start + PAGE_SIZE, filteredGames.length);
+    var pageGames = filteredGames.slice(start, end);
+    var container = document.getElementById('gamesContainer');
+
+    if (filteredGames.length === 0) {
+        container.innerHTML = '<div class="placeholder">No games found</div>';
+        document.getElementById('pagination').style.display = 'none';
+        document.getElementById('searchInfo').textContent = 'No results';
+        return;
+    }
+
+    // Use a fragment so we only touch the DOM once
+    var frag = document.createDocumentFragment();
+
+    for (var i = 0; i < pageGames.length; i++) {
+        frag.appendChild(buildGameCard(pageGames[i]));
+    }
+
+    container.innerHTML = '';
+    container.appendChild(frag);
+
+    // Info bar
+    document.getElementById('searchInfo').textContent =
+        'Showing ' + (start + 1) + ' - ' + end +
+        ' of ' + filteredGames.length.toLocaleString() + ' games';
+
+    // Pagination controls
+    var totalPages = Math.ceil(filteredGames.length / PAGE_SIZE);
+    var pag = document.getElementById('pagination');
+    if (totalPages > 1) {
+        pag.style.display = 'flex';
+        document.getElementById('pageInfo').textContent =
+            'Page ' + (currentPage + 1) + ' / ' + totalPages;
+        document.getElementById('prevBtn').disabled = currentPage === 0;
+        document.getElementById('nextBtn').disabled = currentPage >= totalPages - 1;
+    } else {
+        pag.style.display = 'none';
+    }
+
+    window.scrollTo(0, 0);
+}
+
+function buildGameCard(game) {
+    var gameDiv = document.createElement('div');
+    gameDiv.className = 'game-item';
+
+    var title = document.createElement('div');
+    title.className = 'game-title';
+    title.textContent = game.name;
+    gameDiv.appendChild(title);
+
+    var linksDiv = document.createElement('div');
+    linksDiv.className = 'download-links';
+
+    var dl        = game.download_links || {};
+    var mediafire = dl.mediafire || [];
+    var onefile   = dl['1file']  || [];
+    var other     = dl.other     || [];
+
+    appendBtns(linksDiv, mediafire, 'btn-mediafire', 'Mediafire', game.name);
+    appendBtns(linksDiv, onefile,   'btn-1file',     '1File',     game.name);
+    appendBtns(linksDiv, other,     'btn-other',     'Mirror',    game.name);
+
+    gameDiv.appendChild(linksDiv);
+
+    var count = document.createElement('div');
+    count.className = 'link-count';
+    count.textContent = (game.total_links || (mediafire.length + onefile.length + other.length)) + ' link(s) available';
+    gameDiv.appendChild(count);
+
+    return gameDiv;
+}
+
+function appendBtns(container, links, cls, label, gameName) {
+    for (var i = 0; i < links.length; i++) {
+        var btn = document.createElement('a');
+        btn.href = 'redirect-optimized.html?url=' + encodeURIComponent(links[i]) +
+                   '&game=' + encodeURIComponent(gameName) +
+                   '&host=' + label.toLowerCase();
+        btn.className = 'download-btn ' + cls;
+        btn.textContent = label + ' ' + (i + 1);
+        btn.target = '_blank';
+        container.appendChild(btn);
+    }
+}
+
+function changePage(dir) {
+    var totalPages = Math.ceil(filteredGames.length / PAGE_SIZE);
+    var newPage    = currentPage + dir;
+    if (newPage < 0 || newPage >= totalPages) return;
+    currentPage = newPage;
+    renderPage();
+}
+
+function showPlaceholder() {
+    var msg = allGames.length > 0
+        ? '<div class="placeholder">' +
+          '<div style="font-size:2em;color:#00d4ff;font-weight:bold;margin-bottom:15px;">' +
+          allGames.length.toLocaleString() + ' games loaded and ready</div>' +
+          '<div style="color:#aaa;font-size:0.8em;">Pick a letter above or type in the search box</div>' +
+          '</div>'
+        : '<div class="placeholder">Loading database...</div>';
+
+    document.getElementById('gamesContainer').innerHTML = msg;
+    document.getElementById('pagination').style.display = 'none';
+    document.getElementById('searchInfo').textContent =
+        allGames.length > 0
+            ? allGames.length.toLocaleString() + ' games ready to browse'
+            : 'Loading...';
+}
+
+function showError(msg) {
+    document.getElementById('gamesContainer').innerHTML =
+        '<div class="placeholder">Error: ' + msg + '<br><br>' +
+        '<button onclick="loadGames()" style="padding:12px 24px;font-size:16px;' +
+        'cursor:pointer;background:#e94560;color:white;border:none;border-radius:5px;">Retry</button></div>';
+    document.getElementById('searchInfo').textContent = 'Error loading database';
+}
+
+window.addEventListener('scroll', function() {
+    document.getElementById('scrollTop').classList[window.scrollY > 300 ? 'add' : 'remove']('show');
+});
+
+loadGames();
+</script>
 </body>
 </html>
