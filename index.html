@@ -311,12 +311,27 @@
         // Load games data
         async function loadGames() {
             try {
-                const response = await fetch('ps4_games_expanded.json');
-                allGames = await response.json();
+                // Try expanded JSON first, fall back to the other file
+                let response = await fetch('ps4_games_expanded.json');
+                if (!response.ok) {
+                    response = await fetch('ps4_games_with_downloads.json');
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: Could not load database file`);
+                }
+                const data = await response.json();
+                // Handle both array format and object-with-games format
+                allGames = Array.isArray(data) ? data : (data.games || Object.values(data));
                 displayGames(allGames);
                 document.getElementById('searchInfo').textContent = `Showing all ${allGames.length.toLocaleString()} games`;
             } catch (error) {
-                document.getElementById('gamesContainer').innerHTML = '<div class="loading">Error loading games database. Please refresh the page.</div>';
+                document.getElementById('gamesContainer').innerHTML = `
+                    <div class="loading">
+                        ❌ Error loading database: ${error.message}<br><br>
+                        <button onclick="loadGames()" style="padding:10px 20px;font-size:16px;cursor:pointer;background:#003791;color:white;border:none;border-radius:8px;">
+                            Retry
+                        </button>
+                    </div>`;
                 console.error('Error loading games:', error);
             }
         }
